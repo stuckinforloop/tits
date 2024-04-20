@@ -45,7 +45,8 @@ impl App {
         let span_vec = string_to_spans(&text);
 
         let mut app = Self {
-            screen: Screen::Start,
+            // TODO: change this to start
+            screen: Screen::Typing,
             text,
             span_vec,
             cursor_idx: 0,
@@ -145,7 +146,8 @@ impl App {
     }
 
     pub fn reset(&mut self) {
-        self.screen = Screen::Start;
+        // TODO: change this to start
+        self.screen = Screen::Typing;
         self.text = gen_text();
         self.span_vec = string_to_spans(&self.text);
         self.cursor_idx = 0;

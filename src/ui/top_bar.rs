@@ -10,15 +10,7 @@ use crate::app::{App, Screen};
 
 fn get_right_top_bar_spans<'a>(app: &mut App) -> Vec<Span<'a>> {
     match app.screen {
-        Screen::Start => vec!["Press ".into(), "ESC ".bold(), "to exit ".into()],
-        Screen::Typing => vec![],
-        Screen::Result => vec![
-            "Press ".into(),
-            "ESC ".bold(),
-            "to exit, ".into(),
-            "H ".bold(),
-            "to go home ".bold(),
-        ],
+        _ => vec!["Press ".into(), "ESC ".bold(), "to exit ".into()],
     }
 }
 
@@ -27,7 +19,11 @@ fn get_left_top_bar_spans<'a>(app: &mut App) -> Vec<Span<'a>> {
     match app.screen {
         Screen::Start => vec![],
         Screen::Typing => vec!["Time Left: ".into(), time_left.bold()],
-        Screen::Result => vec!["Press ".into(), "TAB".bold(), " to restart".into()],
+        Screen::Result => vec![
+            "Press ".into(),
+            "TAB ".bold(),
+            "to start new session ".into(),
+        ],
     }
 }
 

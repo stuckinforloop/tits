@@ -53,15 +53,10 @@ pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
             KeyCode::Esc => app.quit(),
             KeyCode::Tab => {
                 app.reset();
-                app.screen = Screen::Typing;
             }
             KeyCode::Char(ch) => {
                 if (ch == 'c' || ch == 'C') && key_event.modifiers == KeyModifiers::CONTROL {
                     app.quit();
-                }
-
-                if ch == 'h' || ch == 'H' {
-                    app.reset();
                 }
             }
             _ => {}
