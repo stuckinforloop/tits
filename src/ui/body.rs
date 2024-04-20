@@ -39,8 +39,11 @@ pub fn render(body_rect: Rect, app: &mut App, frame: &mut Frame) {
 
         Screen::Result => {
             let words_per_minute = ((app.keys_pressed / 5.0) / 0.5).to_string();
-            get_paragraph(" Your Score ", vec![words_per_minute.into()])
-                .alignment(Alignment::Center)
+            get_paragraph(
+                " Your Score ",
+                vec!["Words Per Minute ".into(), words_per_minute.into()],
+            )
+            .alignment(Alignment::Center)
         }
     };
     frame.render_widget(paragraph, body_rect);
