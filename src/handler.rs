@@ -9,41 +9,52 @@ pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
     match app.screen {
         Screen::Start => match key_event.code {
             KeyCode::Esc => app.quit(),
+            KeyCode::Enter => {
+                app.screen = Screen::Typing;
+            }
             KeyCode::Char(ch) => {
                 if (ch == 'c' || ch == 'C') && key_event.modifiers == KeyModifiers::CONTROL {
                     app.quit();
                 }
-
-                app.enter_char(ch);
-                app.screen = Screen::Typing;
-
-                let _sender = app._sender.clone();
-                tokio::spawn(async move {
-                    let mut countdown = 0;
-                    while countdown < 30 {
-                        tokio::time::sleep(Duration::from_secs(1)).await;
-                        _sender.send(AppEvent::Tick).unwrap();
-                        countdown += 1;
-                    }
-                });
             }
             _ => {}
         },
         Screen::Typing => match key_event.code {
-            KeyCode::Esc => app.quit(),
-            KeyCode::Backspace => app.remove_char(),
+            KeyCode::Esc => {
+                app.reset();
+            }
+            KeyCode::Backspace => {
+                if app.started_typing {
+                    app.remove_char();
+                }
+            }
             KeyCode::Char(ch) => {
                 if (ch == 'c' || ch == 'C') && key_event.modifiers == KeyModifiers::CONTROL {
                     app.quit();
                 }
 
                 app.enter_char(ch);
+                if !app.started_typing {
+                    let _sender = app._sender.clone();
+                    tokio::spawn(async move {
+                        let mut countdown = 0;
+                        while countdown < 30 {
+                            tokio::time::sleep(Duration::from_secs(1)).await;
+                            _sender.send(AppEvent::Tick).unwrap();
+                            countdown += 1;
+                        }
+                    });
+                    app.started_typing = true;
+                }
             }
             _ => {}
         },
         Screen::Result => match key_event.code {
             KeyCode::Esc => app.quit(),
-            KeyCode::Tab => app.reset(),
+            KeyCode::Tab => {
+                app.reset();
+                app.screen = Screen::Typing;
+            }
             _ => {}
         },
     }

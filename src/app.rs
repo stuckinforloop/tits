@@ -27,6 +27,7 @@ enum CursorMovement {
 #[derive(Debug)]
 pub struct App {
     pub screen: Screen,
+    pub started_typing: bool,
     pub text: String,
     pub span_vec: Vec<Span<'static>>,
     pub cursor_idx: usize,
@@ -51,6 +52,7 @@ impl App {
             keys_pressed: 0.0,
             countdown: 0,
             exit: false,
+            started_typing: false,
             _sender,
         };
 
@@ -149,6 +151,7 @@ impl App {
         self.cursor_idx = 0;
         self.keys_pressed = 0.0;
         self.countdown = 0;
+        self.started_typing = false;
     }
 }
 
