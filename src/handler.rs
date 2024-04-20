@@ -21,10 +21,10 @@ pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
         },
         Screen::Typing => match key_event.code {
             KeyCode::Esc => {
-                app.reset();
+                app.quit();
             }
             KeyCode::Backspace => {
-                if app.started_typing {
+                if app.is_typing {
                     app.remove_char();
                 }
             }
@@ -34,7 +34,7 @@ pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
                 }
 
                 app.enter_char(ch);
-                if !app.started_typing {
+                if !app.is_typing {
                     let _sender = app._sender.clone();
                     tokio::spawn(async move {
                         let mut countdown = 0;
@@ -44,7 +44,7 @@ pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
                             countdown += 1;
                         }
                     });
-                    app.started_typing = true;
+                    app.is_typing = true;
                 }
             }
             _ => {}
@@ -54,6 +54,15 @@ pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
             KeyCode::Tab => {
                 app.reset();
                 app.screen = Screen::Typing;
+            }
+            KeyCode::Char(ch) => {
+                if (ch == 'c' || ch == 'C') && key_event.modifiers == KeyModifiers::CONTROL {
+                    app.quit();
+                }
+
+                if ch == 'h' || ch == 'H' {
+                    app.reset();
+                }
             }
             _ => {}
         },

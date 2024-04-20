@@ -29,16 +29,12 @@ pub fn render(body_rect: Rect, app: &mut App, frame: &mut Frame) {
         .alignment(Alignment::Center),
 
         Screen::Typing => {
-            let title = if app.started_typing {
-                ""
-            } else {
-                " Start Typing! "
-            };
+            let title = if app.is_typing { "" } else { " Start Typing! " };
             get_paragraph(title, app.span_vec.clone())
         }
 
         Screen::Result => {
-            let words_per_minute = ((app.keys_pressed / 5.0) / 0.5).to_string();
+            let words_per_minute = ((app.key_count / 5.0) / 0.5).to_string();
             get_paragraph(
                 " Your Score ",
                 vec!["Words Per Minute ".into(), words_per_minute.into()],
