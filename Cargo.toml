@@ -1,6 +1,6 @@
 [package]
 name = "tits-rs"
-version = "0.0.1"
+version = "0.0.2"
 authors = ["stuckinforloop <device.neel@gmail.com>"]
 license = "MIT"
 edition = "2021"
