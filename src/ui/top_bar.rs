@@ -18,7 +18,13 @@ fn get_left_top_bar_spans<'a>(app: &mut App) -> Vec<Span<'a>> {
     let time_left = (30 - app.countdown).to_string();
     match app.screen {
         Screen::Start => vec![],
-        Screen::Typing => vec!["Time Left: ".into(), time_left.bold()],
+        Screen::Typing => vec![
+            "Time Left: ".into(),
+            time_left.bold(),
+            " Press ".into(),
+            "TAB ".bold(),
+            "to restart session".into(),
+        ],
         Screen::Result => vec![
             "Press ".into(),
             "TAB ".bold(),

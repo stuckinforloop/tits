@@ -28,6 +28,9 @@ pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
                     app.remove_char();
                 }
             }
+            KeyCode::Tab => {
+                app.reset();
+            }
             KeyCode::Char(ch) => {
                 if (ch == 'c' || ch == 'C') && key_event.modifiers == KeyModifiers::CONTROL {
                     app.quit();
@@ -36,7 +39,7 @@ pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
                 app.enter_char(ch);
                 if !app.is_typing {
                     let _sender = app._sender.clone();
-                    tokio::spawn(async move {
+                    let timer_handle = tokio::spawn(async move {
                         let mut countdown = 0;
                         while countdown < 30 {
                             tokio::time::sleep(Duration::from_secs(1)).await;
@@ -44,6 +47,7 @@ pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
                             countdown += 1;
                         }
                     });
+                    app.timer_handle = Some(timer_handle);
                     app.is_typing = true;
                 }
             }

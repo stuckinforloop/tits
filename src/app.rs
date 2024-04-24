@@ -4,7 +4,7 @@ use ratatui::{
     style::{self, Color, Style, Stylize},
     text::Span,
 };
-use tokio::sync::mpsc::UnboundedSender;
+use tokio::{sync::mpsc::UnboundedSender, task::JoinHandle};
 
 use crate::{event::Event, utils::gen_text};
 
@@ -35,6 +35,7 @@ pub struct App {
     pub key_count: f64,
     pub exit: bool,
     pub _sender: UnboundedSender<Event>,
+    pub timer_handle: Option<JoinHandle<()>>,
 }
 
 impl App {
@@ -55,6 +56,7 @@ impl App {
             exit: false,
             is_typing: false,
             _sender,
+            timer_handle: None,
         };
 
         app.paint_cursor(0, true);
@@ -154,6 +156,9 @@ impl App {
         self.key_count = 0.0;
         self.countdown = 0;
         self.is_typing = false;
+        if let Some(timer_handler) = &self.timer_handle {
+            timer_handler.abort();
+        }
     }
 }
 
